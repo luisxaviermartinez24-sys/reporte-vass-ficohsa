@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Semanal — Programa Ficohsa · VASS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F2F5;color:#222}
+.header{background:#003DA5;padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
+.header-logo{font-size:24px;font-weight:700;color:#00AEEF;letter-spacing:.5px}
+.header-right{text-align:right}
+.header-title{color:#fff;font-size:14px;font-weight:600}
+.header-sub{color:#8BB8E8;font-size:11px;margin-top:2px}
+.accent-bar{height:4px;background:#00AEEF}
+.form-body{max-width:740px;margin:28px auto;padding:0 16px 48px}
+.section{background:#fff;border-radius:8px;border:0.5px solid #dde3ee;margin-bottom:16px;overflow:hidden}
+.section-header{background:#003DA5;padding:10px 20px;display:flex;align-items:center;gap:8px}
+.section-num{background:#00AEEF;color:#fff;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-header span{color:#fff;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+.section-body{padding:18px 20px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.field label{font-size:11px;font-weight:600;color:#003DA5;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.field input,.field select{width:100%;padding:8px 10px;border:1px solid #ccd6e8;border-radius:5px;font-size:13px;color:#222;font-family:'Segoe UI',Arial,sans-serif;background:#fff;outline:none;transition:border .15s}
+.field input:focus,.field select:focus{border-color:#00AEEF;box-shadow:0 0 0 2px rgba(0,174,239,.12)}
+.hint{font-size:10px;color:#aaa;margin-bottom:8px}
+.divider{height:0.5px;background:#eee;margin:12px 0}
+.info-badge{background:#EBF3FB;border-radius:5px;padding:8px 12px;font-size:11px;color:#185FA5;margin-bottom:14px;display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.rag-display{display:flex;gap:10px;margin-top:4px}
+.rag-box{flex:1;border-radius:6px;padding:10px 12px;text-align:center;border:1px solid #eee;transition:all .25s;background:#fafafa}
+.rag-box-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:5px}
+.rag-box-value{font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.rag-dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0}
+.items-group{display:flex;flex-direction:column;gap:7px}
+.item-row{display:flex;align-items:center;gap:8px}
+.item-num{font-size:10px;font-weight:700;color:#00AEEF;width:16px;flex-shrink:0;text-align:center}
+.item-row input{flex:1;padding:7px 10px;border:1px solid #ccd6e8;border-radius:5px;font-size:12px;color:#222;font-family:'Segoe UI',Arial,sans-serif;outline:none;transition:border .15s}
+.item-row input:focus{border-color:#00AEEF;box-shadow:0 0 0 2px rgba(0,174,239,.12)}
+.col-label{font-size:11px;font-weight:600;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.btn-submit{width:100%;background:#003DA5;color:#fff;border:none;border-radius:6px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.04em;font-family:'Segoe UI',Arial,sans-serif;transition:background .15s;margin-top:8px}
+.btn-submit:hover{background:#002a85}
+.btn-submit:active{background:#001e6a}
+.toast{display:none;background:#1D9E75;color:#fff;border-radius:6px;padding:12px 20px;font-size:13px;font-weight:500;margin-top:12px;text-align:center}
+.footer-bar{background:#003DA5;padding:10px 32px;display:flex;align-items:center;justify-content:space-between}
+.footer-text{font-size:10px;color:#8BB8E8}
+.required-star{color:#E24B4A;margin-left:2px}
+.rag-rules{background:#F5F7FA;border-radius:5px;padding:8px 12px;font-size:10px;color:#555;margin-bottom:14px;line-height:1.8}
+.rag-rules span{font-weight:600}
+/* Fases */
+.phase-block{border:0.5px solid #e0e8f4;border-radius:7px;margin-bottom:12px;overflow:hidden}
+.phase-block:last-child{margin-bottom:0}
+.phase-header{padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.phase-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}
+.phase-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.phase-body{padding:12px 14px;border-top:0.5px solid #eee;background:#fafcff}
+.phase-body.hidden{display:none}
+.checkbox-wrap{display:flex;align-items:center;gap:6px}
+.checkbox-wrap input[type=checkbox]{width:16px;height:16px;accent-color:#003DA5;cursor:pointer;flex-shrink:0}
+.checkbox-wrap span{font-size:11px;font-weight:600;color:#003DA5}
+.grid-5{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 80px;gap:10px;align-items:end;margin-bottom:10px}
+.phase-input{width:100%;padding:7px 9px;border:1px solid #ccd6e8;border-radius:5px;font-size:12px;color:#222;font-family:'Segoe UI',Arial,sans-serif;outline:none;transition:border .15s}
+.phase-input:focus{border-color:#00AEEF;box-shadow:0 0 0 2px rgba(0,174,239,.12)}
+.desvio-box{background:#F5F7FA;border-radius:5px;padding:7px 9px;text-align:center}
+.desvio-label{font-size:9px;color:#999;margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
+.desvio-val{font-size:14px;font-weight:700;color:#aaa}
+.sub-label{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:4px}
+.defectos-grid{display:grid;grid-template-columns:90px 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:4px}
+.defectos-header{font-size:9px;font-weight:700;color:#999;text-align:center;text-transform:uppercase}
+.defectos-row-label{font-size:10px;font-weight:600;padding:2px 0}
+.sev-critico{color:#A32D2D}.sev-mayor{color:#854F0B}.sev-menor{color:#185FA5}
+.def-input{padding:5px 8px;border:1px solid #ccd6e8;border-radius:5px;font-size:12px;outline:none;font-family:'Segoe UI',Arial,sans-serif;width:100%;text-align:center}
+.def-input:focus{border-color:#00AEEF;box-shadow:0 0 0 2px rgba(0,174,239,.12)}
+.rag-fase-row{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:0.5px solid #eee}
+.rag-fase-box{flex:1;border-radius:5px;padding:6px 8px;text-align:center;border:1px solid #eee;background:#fafafa;transition:all .2s}
+.rag-fase-label{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px}
+.rag-fase-val{font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:4px}
+.rag-fase-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+.peso-badge{font-size:8px;color:#aaa;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">VASS</div>
+  <div class="header-right">
+    <div class="header-title">Reporte semanal de proyecto</div>
+    <div class="header-sub">Programa Transformación Digital · Ficohsa Honduras</div>
+  </div>
+</div>
+<div class="accent-bar"></div>
+
+<div class="form-body">
+
+  <!-- SECCIÓN 1 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">1</div><span>Identificación</span></div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="field">
+          <label>Project Manager<span class="required-star">*</span></label>
+          <select id="pm">
+            <option value="">Selecciona tu nombre</option>
+            <option>Ana Victoria Sosa Avalos</option>
+            <option>Jose Martin Patricio Orozco</option>
+            <option>Juan Carlos Galarza Oleas</option>
+            <option>Luis Xavier Martinez Lazo</option>
+            <option>Maria Fernanda Morales Salazar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Proyecto<span class="required-star">*</span></label>
+          <select id="proyecto">
+            <option value="">Selecciona el proyecto</option>
+            <option>Onboarding Digital Tarjetas</option>
+            <option>Activos Honduras</option>
+            <option>Pasivos Honduras</option>
+            <option>Activos Nicaragua – Cuentas Crédito</option>
+            <option>Pasivos Nicaragua – Cuentas Jurídicas</option>
+            <option>Pasivos Panamá – Persona Natural</option>
+            <option>Panamá Activos – Persona Jurídica</option>
+            <option>Onboarding Créditos Hipotecarios</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Fecha de corte<span class="required-star">*</span></label>
+          <input type="date" id="fecha">
+        </div>
+        <div class="field">
+          <label>Sprint activo</label>
+          <input type="text" id="sprint" placeholder="Ej. S4">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">2</div><span>Avance y bloqueos</span></div>
+    <div class="section-body">
+      <div class="rag-rules">
+        <span>Alcance (bloqueos activos):</span> Verde = 0 &nbsp;|&nbsp; Ámbar 1–2 &nbsp;|&nbsp; Rojo ≥ 3 &nbsp;&nbsp;
+        <span>Cronograma (desviación plan−real):</span> Verde ≤ 5pts &nbsp;|&nbsp; Ámbar 6–10pts &nbsp;|&nbsp; Rojo ≥ 11pts
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label>Avance planeado %<span class="required-star">*</span></label>
+          <input type="number" id="plan" min="0" max="100" placeholder="0–100" oninput="calcRAG()">
+        </div>
+        <div class="field">
+          <label>Avance real %<span class="required-star">*</span></label>
+          <input type="number" id="real" min="0" max="100" placeholder="0–100" oninput="calcRAG()">
+        </div>
+        <div class="field">
+          <label>Bloqueos activos (cant.)</label>
+          <input type="number" id="bloqueos_num" min="0" placeholder="0" oninput="calcRAG()" onchange="calcRAG()">
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:0">
+        <div class="field">
+          <label>Días de bloqueo</label>
+          <input type="number" id="bloqueo" min="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label>Ambiente bloqueado</label>
+          <select id="ambiente">
+            <option value="">Sin bloqueo</option>
+            <option>DEV</option><option>QA</option><option>PROD</option>
+          </select>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:11px;font-weight:600;color:#003DA5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Semáforo calculado</div>
+      <div class="rag-display">
+        <div class="rag-box" id="box-alcance"><div class="rag-box-label">Alcance</div><div class="rag-box-value" id="val-alcance"><span class="rag-dot" style="background:#ccc"></span><span style="color:#aaa">—</span></div></div>
+        <div class="rag-box" id="box-crono"><div class="rag-box-label">Cronograma</div><div class="rag-box-value" id="val-crono"><span class="rag-dot" style="background:#ccc"></span><span style="color:#aaa">—</span></div></div>
+        <div class="rag-box" id="box-salud" style="border:1.5px solid #dde3ee"><div class="rag-box-label">Salud general</div><div class="rag-box-value" id="val-salud"><span class="rag-dot" style="background:#ccc"></span><span style="color:#aaa">—</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">3</div><span>Hitos y compromisos</span></div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div>
+          <span class="col-label" style="color:#003DA5">Hitos del periodo</span>
+          <div class="hint">¿Qué se logró esta semana?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num">1</span><input type="text" id="h1" placeholder="Hito completado"></div>
+            <div class="item-row"><span class="item-num">2</span><input type="text" id="h2" placeholder="Hito completado"></div>
+            <div class="item-row"><span class="item-num">3</span><input type="text" id="h3" placeholder="Hito completado"></div>
+            <div class="item-row"><span class="item-num">4</span><input type="text" id="h4" placeholder="Hito completado"></div>
+            <div class="item-row"><span class="item-num">5</span><input type="text" id="h5" placeholder="Hito completado"></div>
+          </div>
+        </div>
+        <div>
+          <span class="col-label" style="color:#003DA5">Compromisos próximo periodo</span>
+          <div class="hint">¿Qué se entregará la próxima semana?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num">1</span><input type="text" id="c1" placeholder="Compromiso"></div>
+            <div class="item-row"><span class="item-num">2</span><input type="text" id="c2" placeholder="Compromiso"></div>
+            <div class="item-row"><span class="item-num">3</span><input type="text" id="c3" placeholder="Compromiso"></div>
+            <div class="item-row"><span class="item-num">4</span><input type="text" id="c4" placeholder="Compromiso"></div>
+            <div class="item-row"><span class="item-num">5</span><input type="text" id="c5" placeholder="Compromiso"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">4</div><span>Riesgos, apoyos e impactos</span></div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div>
+          <span class="col-label" style="color:#A32D2D">Riesgos activos</span>
+          <div class="hint">¿Qué amenaza el proyecto?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">1</span><input type="text" id="r1" placeholder="Riesgo"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">2</span><input type="text" id="r2" placeholder="Riesgo"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">3</span><input type="text" id="r3" placeholder="Riesgo"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">4</span><input type="text" id="r4" placeholder="Riesgo"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">5</span><input type="text" id="r5" placeholder="Riesgo"></div>
+          </div>
+        </div>
+        <div>
+          <span class="col-label" style="color:#854F0B">Apoyos requeridos</span>
+          <div class="hint">¿Qué necesitas que se decida?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#EF9F27">1</span><input type="text" id="a1" placeholder="Apoyo o decisión"></div>
+            <div class="item-row"><span class="item-num" style="color:#EF9F27">2</span><input type="text" id="a2" placeholder="Apoyo o decisión"></div>
+            <div class="item-row"><span class="item-num" style="color:#EF9F27">3</span><input type="text" id="a3" placeholder="Apoyo o decisión"></div>
+            <div class="item-row"><span class="item-num" style="color:#EF9F27">4</span><input type="text" id="a4" placeholder="Apoyo o decisión"></div>
+            <div class="item-row"><span class="item-num" style="color:#EF9F27">5</span><input type="text" id="a5" placeholder="Apoyo o decisión"></div>
+          </div>
+        </div>
+        <div style="border-left:2px solid #E24B4A;padding-left:12px">
+          <span class="col-label" style="color:#A32D2D">Impactos materializados</span>
+          <div class="hint">¿Qué impacto ya ocurrió en el proyecto?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">1</span><input type="text" id="im1" placeholder="Impacto materializado"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">2</span><input type="text" id="im2" placeholder="Impacto materializado"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">3</span><input type="text" id="im3" placeholder="Impacto materializado"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">4</span><input type="text" id="im4" placeholder="Impacto materializado"></div>
+            <div class="item-row"><span class="item-num" style="color:#E24B4A">5</span><input type="text" id="im5" placeholder="Impacto materializado"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">5</div><span>Situación del proyecto</span></div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div>
+          <span class="col-label" style="color:#3B6D11">Logros del periodo</span>
+          <div class="hint">¿Qué se entregó o completó?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#639922">1</span><input type="text" id="lg1" placeholder="Logro"></div>
+            <div class="item-row"><span class="item-num" style="color:#639922">2</span><input type="text" id="lg2" placeholder="Logro"></div>
+            <div class="item-row"><span class="item-num" style="color:#639922">3</span><input type="text" id="lg3" placeholder="Logro"></div>
+            <div class="item-row"><span class="item-num" style="color:#639922">4</span><input type="text" id="lg4" placeholder="Logro"></div>
+            <div class="item-row"><span class="item-num" style="color:#639922">5</span><input type="text" id="lg5" placeholder="Logro"></div>
+          </div>
+        </div>
+        <div>
+          <span class="col-label" style="color:#185FA5">Pendiente · Banco</span>
+          <div class="hint">¿Qué esperas del cliente?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#185FA5">1</span><input type="text" id="pb1" placeholder="Pendiente banco"></div>
+            <div class="item-row"><span class="item-num" style="color:#185FA5">2</span><input type="text" id="pb2" placeholder="Pendiente banco"></div>
+            <div class="item-row"><span class="item-num" style="color:#185FA5">3</span><input type="text" id="pb3" placeholder="Pendiente banco"></div>
+            <div class="item-row"><span class="item-num" style="color:#185FA5">4</span><input type="text" id="pb4" placeholder="Pendiente banco"></div>
+            <div class="item-row"><span class="item-num" style="color:#185FA5">5</span><input type="text" id="pb5" placeholder="Pendiente banco"></div>
+          </div>
+        </div>
+        <div>
+          <span class="col-label" style="color:#854F0B">En gestión · VASS</span>
+          <div class="hint">¿Qué gestiona el equipo VASS?</div>
+          <div class="items-group">
+            <div class="item-row"><span class="item-num" style="color:#854F0B">1</span><input type="text" id="pv1" placeholder="Gestión VASS"></div>
+            <div class="item-row"><span class="item-num" style="color:#854F0B">2</span><input type="text" id="pv2" placeholder="Gestión VASS"></div>
+            <div class="item-row"><span class="item-num" style="color:#854F0B">3</span><input type="text" id="pv3" placeholder="Gestión VASS"></div>
+            <div class="item-row"><span class="item-num" style="color:#854F0B">4</span><input type="text" id="pv4" placeholder="Gestión VASS"></div>
+            <div class="item-row"><span class="item-num" style="color:#854F0B">5</span><input type="text" id="pv5" placeholder="Gestión VASS"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6 -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">6</div><span>Fases del proyecto — métricas y roadmap</span></div>
+    <div class="section-body">
+      <div class="info-badge">
+        <span>ℹ️</span>
+        Marca las fases activas. Las fases pueden solaparse. El RAG general se calcula como promedio ponderado: Diseño 15% · Desarrollo 40% · QA 30% · PROD 15%.
+      </div>
+
+      <!-- DISEÑO -->
+      <div class="phase-block">
+        <div class="phase-header" style="background:#F0F4FF">
+          <div class="phase-title"><span class="phase-dot" style="background:#6B7FCC"></span><span style="color:#003DA5">Diseño</span></div>
+          <div class="checkbox-wrap"><input type="checkbox" id="dis-activa" onchange="toggleFase('dis');calcRAGGeneral()"><span>Fase activa</span></div>
+        </div>
+        <div class="phase-body hidden" id="body-dis">
+          <div class="grid-5">
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Inicio</label><input class="phase-input" type="date" id="dis-ini"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Fin</label><input class="phase-input" type="date" id="dis-fin"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Planeado</label><input class="phase-input" type="number" id="dis-plan" min="0" max="100" placeholder="0–100" oninput="calcFase('dis');calcRAGGeneral()"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Real</label><input class="phase-input" type="number" id="dis-real" min="0" max="100" placeholder="0–100" oninput="calcFase('dis');calcRAGGeneral()"></div>
+            <div><div class="desvio-box"><div class="desvio-label">Desv.</div><div class="desvio-val" id="dis-desv">—</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESARROLLO -->
+      <div class="phase-block">
+        <div class="phase-header" style="background:#F0F4FF">
+          <div class="phase-title"><span class="phase-dot" style="background:#003DA5"></span><span style="color:#003DA5">Desarrollo</span></div>
+          <div class="checkbox-wrap"><input type="checkbox" id="dev-activa" onchange="toggleFase('dev');calcRAGGeneral()"><span>Fase activa</span></div>
+        </div>
+        <div class="phase-body hidden" id="body-dev">
+          <div class="grid-5">
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Inicio</label><input class="phase-input" type="date" id="dev-ini"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Fin</label><input class="phase-input" type="date" id="dev-fin"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Planeado</label><input class="phase-input" type="number" id="dev-plan" min="0" max="100" placeholder="0–100" oninput="calcFase('dev');calcRAGGeneral()"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Real</label><input class="phase-input" type="number" id="dev-real" min="0" max="100" placeholder="0–100" oninput="calcFase('dev');calcRAGGeneral()"></div>
+            <div><div class="desvio-box"><div class="desvio-label">Desv.</div><div class="desvio-val" id="dev-desv">—</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA -->
+      <div class="phase-block">
+        <div class="phase-header" style="background:#F0F4FF">
+          <div class="phase-title"><span class="phase-dot" style="background:#00AEEF"></span><span style="color:#003DA5">QA / Pruebas</span></div>
+          <div class="checkbox-wrap"><input type="checkbox" id="qa-activa" onchange="toggleFase('qa');calcRAGGeneral()"><span>Fase activa</span></div>
+        </div>
+        <div class="phase-body hidden" id="body-qa">
+          <div class="grid-5">
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Inicio</label><input class="phase-input" type="date" id="qa-ini"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Fin</label><input class="phase-input" type="date" id="qa-fin"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Planeado</label><input class="phase-input" type="number" id="qa-plan" min="0" max="100" placeholder="0–100" oninput="calcFase('qa');calcRAGGeneral()"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">% Real</label><input class="phase-input" type="number" id="qa-real" min="0" max="100" placeholder="0–100" oninput="calcFase('qa');calcRAGGeneral()"></div>
+            <div><div class="desvio-box"><div class="desvio-label">Desv.</div><div class="desvio-val" id="qa-desv">—</div></div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="sub-label">Defectos activos</div>
+          <div style="display:grid;grid-template-columns:90px 1fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:4px">
+            <div></div>
+            <div class="defectos-header" style="background:#EBF3FB;border-radius:4px;padding:3px 4px;color:#003DA5">Reportados</div>
+            <div class="defectos-header">Abiertos</div>
+            <div class="defectos-header">En progreso</div>
+            <div class="defectos-header">Cerrados</div>
+            <div class="defectos-row-label sev-critico">Críticos</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-crit-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-crit-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-crit-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-crit-cl">
+            <div class="defectos-row-label sev-mayor">Mayores</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-may-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-may-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-may-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-may-cl">
+            <div class="defectos-row-label sev-menor">Menores</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-men-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-men-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-men-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="qa-men-cl">
+          </div>
+          <div style="font-size:9px;color:#185FA5;margin-top:6px;background:#EBF3FB;padding:5px 8px;border-radius:4px">
+            <strong>Reportados</strong> = defectos reportados múltiples veces sin resolución
+          </div>
+        </div>
+      </div>
+
+      <!-- PROD -->
+      <div class="phase-block">
+        <div class="phase-header" style="background:#F0F4FF">
+          <div class="phase-title"><span class="phase-dot" style="background:#639922"></span><span style="color:#003DA5">PROD</span></div>
+          <div class="checkbox-wrap"><input type="checkbox" id="prod-activa" onchange="toggleFase('prod');calcRAGGeneral()"><span>Fase activa</span></div>
+        </div>
+        <div class="phase-body hidden" id="body-prod">
+          <div class="grid-2" style="margin-bottom:10px">
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Inicio</label><input class="phase-input" type="date" id="prod-ini"></div>
+            <div><label style="font-size:10px;font-weight:600;color:#003DA5;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em">Fin</label><input class="phase-input" type="date" id="prod-fin"></div>
+          </div>
+          <div class="divider"></div>
+          <div class="sub-label">Incidentes en producción</div>
+          <div style="display:grid;grid-template-columns:90px 1fr 1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:4px">
+            <div></div>
+            <div class="defectos-header" style="background:#EBF3FB;border-radius:4px;padding:3px 4px;color:#003DA5">Reportados</div>
+            <div class="defectos-header">Abiertos</div>
+            <div class="defectos-header">En progreso</div>
+            <div class="defectos-header">Cerrados</div>
+            <div class="defectos-row-label sev-critico">Críticos</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-crit-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-crit-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-crit-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-crit-cl">
+            <div class="defectos-row-label sev-mayor">Mayores</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-may-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-may-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-may-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-may-cl">
+            <div class="defectos-row-label sev-menor">Menores</div>
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-men-rp" style="border-color:#003DA5;background:#EBF3FB">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-men-ab">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-men-ep">
+            <input class="def-input" type="number" min="0" placeholder="0" id="prod-men-cl">
+          </div>
+          <div style="font-size:9px;color:#185FA5;margin-top:6px;background:#EBF3FB;padding:5px 8px;border-radius:4px">
+            <strong>Reportados</strong> = incidentes reportados múltiples veces sin resolución definitiva
+          </div>
+        </div>
+      </div>
+
+      <!-- RAG GENERAL PONDERADO -->
+      <div class="rag-fase-row" id="rag-general-row">
+        <div class="rag-fase-box" id="rfbox-dis"><div class="rag-fase-label">Diseño</div><div class="rag-fase-val"><span class="rag-fase-dot" style="background:#ccc"></span><span style="color:#aaa" id="rfval-dis">Inactiva</span></div><div class="peso-badge">Peso 15%</div></div>
+        <div class="rag-fase-box" id="rfbox-dev"><div class="rag-fase-label">Desarrollo</div><div class="rag-fase-val"><span class="rag-fase-dot" style="background:#ccc"></span><span style="color:#aaa" id="rfval-dev">Inactiva</span></div><div class="peso-badge">Peso 40%</div></div>
+        <div class="rag-fase-box" id="rfbox-qa"><div class="rag-fase-label">QA</div><div class="rag-fase-val"><span class="rag-fase-dot" style="background:#ccc"></span><span style="color:#aaa" id="rfval-qa">Inactiva</span></div><div class="peso-badge">Peso 30%</div></div>
+        <div class="rag-fase-box" id="rfbox-prod"><div class="rag-fase-label">PROD</div><div class="rag-fase-val"><span class="rag-fase-dot" style="background:#ccc"></span><span style="color:#aaa" id="rfval-prod">Inactiva</span></div><div class="peso-badge">Peso 15%</div></div>
+        <div class="rag-fase-box" id="rfbox-general" style="border:1.5px solid #dde3ee"><div class="rag-fase-label">RAG General</div><div class="rag-fase-val"><span class="rag-fase-dot" style="background:#ccc" id="rfdot-general"></span><span style="color:#aaa" id="rfval-general">—</span></div><div class="peso-badge">Promedio ponderado</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="btn-submit" onclick="enviar()">Enviar reporte al programa →</button>
+  <div class="toast" id="toast">✓ Reporte enviado correctamente al Google Sheet del programa</div>
+
+</div>
+
+<div class="footer-bar">
+  <span class="footer-text">Confidencial – VASS © 2026</span>
+  <span class="footer-text">Programa Transformación Digital · Ficohsa Honduras</span>
+</div>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxi2qLL6UJT1N1P-XF8yUVr4rfE5HNIu0giqh0Zdo6Oa5TQTXXCHSr_wOJWFCxnx_3G/exec';
+const C={Verde:'#639922',Ámbar:'#EF9F27',Rojo:'#E24B4A'};
+const B={Verde:'#F0F7EF',Ámbar:'#FFFBF0',Rojo:'#FFF5F5'};
+const PESOS={dis:15,dev:40,qa:30,prod:15};
+
+function g(id){return(document.getElementById(id)||{value:''}).value;}
+function gn(id){const v=parseFloat(g(id));return isNaN(v)?0:v;}
+function isActive(fase){const el=document.getElementById(fase+'-activa');return el&&el.checked;}
+
+function toggleFase(fase){
+  const body=document.getElementById('body-'+fase);
+  if(body) body.classList.toggle('hidden',!isActive(fase));
+}
+
+function ragFromDesv(desv){
+  if(desv<=5) return 'Verde';
+  if(desv<=10) return 'Ámbar';
+  return 'Rojo';
+}
+
+function calcFase(fase){
+  const plan=gn(fase+'-plan'), real=gn(fase+'-real');
+  const desv=plan-real;
+  const el=document.getElementById(fase+'-desv');
+  if(!el) return '—';
+  const rag=ragFromDesv(Math.abs(desv));
+  const color=C[rag]||'#aaa';
+  el.textContent=(desv>0?'−':desv<0?'+':'')+Math.abs(desv)+'pts';
+  el.style.color=color;
+  return rag;
+}
+
+function setFaseRAG(fase,rag){
+  const box=document.getElementById('rfbox-'+fase);
+  const val=document.getElementById('rfval-'+fase);
+  if(!box||!val) return;
+  const c=C[rag]||'#ccc', b=B[rag]||'#fafafa';
+  val.textContent=rag;
+  val.style.color=c;
+  const dot=box.querySelector('.rag-fase-dot');
+  if(dot) dot.style.background=c;
+  box.style.background=b;
+  box.style.borderColor=c;
+}
+
+function setFaseInactive(fase){
+  const box=document.getElementById('rfbox-'+fase);
+  const val=document.getElementById('rfval-'+fase);
+  if(!box||!val) return;
+  val.textContent='Inactiva';
+  val.style.color='#aaa';
+  const dot=box.querySelector('.rag-fase-dot');
+  if(dot) dot.style.background='#ccc';
+  box.style.background='#fafafa';
+  box.style.borderColor='#eee';
+}
+
+function calcRAGGeneral(){
+  const fases=['dis','dev','qa','prod'];
+  let totalPeso=0, score=0;
+  const ragScore={Verde:0,Ámbar:1,Rojo:2};
+  const scoreRAG=['Verde','Ámbar','Rojo'];
+  fases.forEach(f=>{
+    if(isActive(f)){
+      const rag=calcFase(f);
+      setFaseRAG(f,rag);
+      totalPeso+=PESOS[f];
+      score+=ragScore[rag]*PESOS[f];
+    } else {
+      setFaseInactive(f);
+    }
+  });
+  const general=document.getElementById('rfval-general');
+  const dot=document.getElementById('rfdot-general');
+  const box=document.getElementById('rfbox-general');
+  if(totalPeso===0){
+    general.textContent='—';general.style.color='#aaa';
+    if(dot) dot.style.background='#ccc';
+    if(box){box.style.background='#fafafa';box.style.borderColor='#dde3ee';}
+    return;
+  }
+  const avg=score/totalPeso;
+  const ragFinal=avg<0.67?'Verde':avg<1.34?'Ámbar':'Rojo';
+  general.textContent=ragFinal;
+  general.style.color=C[ragFinal];
+  if(dot) dot.style.background=C[ragFinal];
+  if(box){box.style.background=B[ragFinal];box.style.borderColor=C[ragFinal];}
+}
+
+function calcRAG(){
+  const plan=gn('plan'), real=gn('real');
+  const bloqNumStr=g('bloqueos_num');
+  const bloqNum=bloqNumStr===''?0:parseFloat(bloqNumStr)||0;
+  const dev=plan-real;
+  let alcance=bloqNum<=0?'Verde':bloqNum<=2?'Ámbar':'Rojo';
+  let crono=dev<=5?'Verde':dev<=10?'Ámbar':'Rojo';
+  let salud;
+  if(alcance==='Verde'&&crono==='Verde') salud='Verde';
+  else if(alcance==='Verde'&&crono==='Ámbar') salud='Ámbar';
+  else if(alcance==='Verde'&&crono==='Rojo') salud='Rojo';
+  else if(alcance==='Ámbar'&&crono==='Verde') salud='Ámbar';
+  else if(alcance==='Ámbar'&&crono==='Ámbar') salud='Ámbar';
+  else if(alcance==='Ámbar'&&crono==='Rojo') salud='Rojo';
+  else if(alcance==='Rojo'&&crono==='Verde') salud='Ámbar';
+  else if(alcance==='Rojo'&&crono==='Ámbar') salud='Rojo';
+  else salud='Rojo';
+  setRAG('val-alcance','box-alcance',alcance);
+  setRAG('val-crono','box-crono',crono);
+  setRAG('val-salud','box-salud',salud);
+}
+
+function setRAG(valId,boxId,val){
+  const c=C[val]||'#ccc', b=B[val]||'#fafafa';
+  document.getElementById(valId).innerHTML='<span class="rag-dot" style="background:'+c+'"></span><span style="color:'+c+';font-weight:700">'+val+'</span>';
+  const box=document.getElementById(boxId);
+  box.style.background=b; box.style.borderColor=c;
+}
+
+function getRAG(id){
+  const el=document.getElementById(id);
+  if(!el) return'—';
+  const s=el.querySelector('span:last-child');
+  return s?s.textContent:'—';
+}
+
+function buildPayload(){
+  return{
+    timestamp:new Date().toISOString(),
+    pm:g('pm'), proyecto:g('proyecto'), fecha:g('fecha'), sprint:g('sprint'),
+    avance_planeado:g('plan'), avance_real:g('real'),
+    bloqueos_activos:g('bloqueos_num'), bloqueo_dias:g('bloqueo'), ambiente:g('ambiente'),
+    rag_alcance:getRAG('val-alcance'), rag_cronograma:getRAG('val-crono'), rag_salud:getRAG('val-salud'),
+    hito_1:g('h1'),hito_2:g('h2'),hito_3:g('h3'),hito_4:g('h4'),hito_5:g('h5'),
+    compromiso_1:g('c1'),compromiso_2:g('c2'),compromiso_3:g('c3'),compromiso_4:g('c4'),compromiso_5:g('c5'),
+    riesgo_1:g('r1'),riesgo_2:g('r2'),riesgo_3:g('r3'),riesgo_4:g('r4'),riesgo_5:g('r5'),
+    apoyo_1:g('a1'),apoyo_2:g('a2'),apoyo_3:g('a3'),apoyo_4:g('a4'),apoyo_5:g('a5'),
+    impacto_1:g('im1'),impacto_2:g('im2'),impacto_3:g('im3'),impacto_4:g('im4'),impacto_5:g('im5'),logro_2:g('lg2'),logro_3:g('lg3'),logro_4:g('lg4'),logro_5:g('lg5'),
+    banco_1:g('pb1'),banco_2:g('pb2'),banco_3:g('pb3'),banco_4:g('pb4'),banco_5:g('pb5'),
+    vass_1:g('pv1'),vass_2:g('pv2'),vass_3:g('pv3'),vass_4:g('pv4'),vass_5:g('pv5'),
+    dis_activa:isActive('dis')?'Si':'No', dis_inicio:g('dis-ini'), dis_fin:g('dis-fin'), dis_plan:g('dis-plan'), dis_real:g('dis-real'),
+    dev_activa:isActive('dev')?'Si':'No', dev_inicio:g('dev-ini'), dev_fin:g('dev-fin'), dev_plan:g('dev-plan'), dev_real:g('dev-real'),
+    qa_activa:isActive('qa')?'Si':'No', qa_inicio:g('qa-ini'), qa_fin:g('qa-fin'), qa_plan:g('qa-plan'), qa_real:g('qa-real'),
+    qa_crit_rp:g('qa-crit-rp'), qa_crit_ab:g('qa-crit-ab'), qa_crit_ep:g('qa-crit-ep'), qa_crit_cl:g('qa-crit-cl'),
+    qa_may_rp:g('qa-may-rp'), qa_may_ab:g('qa-may-ab'), qa_may_ep:g('qa-may-ep'), qa_may_cl:g('qa-may-cl'),
+    qa_men_rp:g('qa-men-rp'), qa_men_ab:g('qa-men-ab'), qa_men_ep:g('qa-men-ep'), qa_men_cl:g('qa-men-cl'),
+    prod_activa:isActive('prod')?'Si':'No', prod_inicio:g('prod-ini'), prod_fin:g('prod-fin'),
+    prod_crit_rp:g('prod-crit-rp'), prod_crit_ab:g('prod-crit-ab'), prod_crit_ep:g('prod-crit-ep'), prod_crit_cl:g('prod-crit-cl'),
+    prod_may_rp:g('prod-may-rp'), prod_may_ab:g('prod-may-ab'), prod_may_ep:g('prod-may-ep'), prod_may_cl:g('prod-may-cl'),
+    prod_men_rp:g('prod-men-rp'), prod_men_ab:g('prod-men-ab'), prod_men_ep:g('prod-men-ep'), prod_men_cl:g('prod-men-cl'),
+    rag_general:document.getElementById('rfval-general')?document.getElementById('rfval-general').textContent:'—'
+  };
+}
+
+function validar(d){
+  if(!d.pm){alert('Selecciona tu nombre.');return false;}
+  if(!d.proyecto){alert('Selecciona el proyecto.');return false;}
+  if(!d.fecha){alert('Ingresa la fecha de corte.');return false;}
+  if(!d.avance_planeado){alert('Ingresa el avance planeado.');return false;}
+  if(d.avance_real===''||d.avance_real===undefined){alert('Ingresa el avance real.');return false;}
+  return true;
+}
+
+function enviar(){
+  const data=buildPayload();
+  if(!validar(data)) return;
+  const btn=document.querySelector('.btn-submit');
+  btn.textContent='Enviando...'; btn.disabled=true;
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+  .then(()=>{
+    btn.textContent='Enviar reporte al programa →'; btn.disabled=false;
+    const t=document.getElementById('toast');
+    t.style.display='block';
+    setTimeout(()=>{t.style.display='none';},5000);
+  })
+  .catch(()=>{
+    btn.textContent='Enviar reporte al programa →'; btn.disabled=false;
+    alert('Error al enviar. Verifica la conexión e intenta de nuevo.');
+  });
+}
+</script>
+</body>
+</html>
